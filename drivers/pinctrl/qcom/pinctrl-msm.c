@@ -504,8 +504,16 @@ static void msm_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
 	unsigned i;
 
 	for (i = 0; i < chip->ngpio; i++, gpio++) {
+#ifdef CONFIG_MACH_LAVENDER
+		/* Don't try and show secure world GPIOs */
+		if (i != 8 && i != 9 && i != 10 && i != 11 && i != 20 && i != 72) {
+			msm_gpio_dbg_show_one(s, NULL, chip, i, gpio);
+			seq_puts(s, "\n");
+		}
+#else
 		msm_gpio_dbg_show_one(s, NULL, chip, i, gpio);
 		seq_puts(s, "\n");
+#endif
 	}
 }
 
