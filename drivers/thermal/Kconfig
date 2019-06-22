@@ -15,6 +15,14 @@ menuconfig THERMAL
 
 if THERMAL
 
+config THERMAL_SWITCH
+	bool "Magic Xiaomi THERMAL_SWITCH"
+	depends on MACH_XIAOMI
+	default y
+	help
+		This code literally stores a couple of numbers in kernelspace for userspace to access
+		as it pleases.
+
 config THERMAL_HWMON
 	bool
 	prompt "Expose thermal sensors as hwmon device"
