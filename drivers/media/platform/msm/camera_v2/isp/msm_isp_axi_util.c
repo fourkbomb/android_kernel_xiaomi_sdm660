@@ -1,4 +1,5 @@
 /* Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -544,8 +545,13 @@ static void msm_isp_cfg_framedrop_reg(
 	if (!runtime_init_frame_drop)
 		framedrop_period = stream_info->current_framedrop_period;
 
-	if (MSM_VFE_STREAM_STOP_PERIOD != framedrop_period)
+	if (MSM_VFE_STREAM_STOP_PERIOD != framedrop_period) {
 		framedrop_pattern = 0x1;
+#ifdef CONFIG_MACH_XIAOMI
+		if (framedrop_period > 1)
+			framedrop_pattern = framedrop_pattern << (framedrop_period-1);
+#endif
+	}
 
 	BUG_ON(0 == framedrop_period);
 	for (i = 0; i < stream_info->num_isp; i++) {
@@ -3869,6 +3875,10 @@ int msm_isp_update_axi_stream(struct vfe_device *vfe_dev, void *arg)
 			UPDATE_STREAM_REQUEST_FRAMES &&
 			update_cmd->update_type !=
 			UPDATE_STREAM_REMOVE_BUFQ &&
+#ifdef CONFIG_MACH_XIAOMI
+			update_cmd->update_type !=
+			UPDATE_STREAM_REQUEST_FRAMES_VER2 &&
+#endif
 			update_cmd->update_type !=
 			UPDATE_STREAM_SW_FRAME_DROP) {
 			pr_err("%s: Invalid stream state %d, update cmd %d\n",

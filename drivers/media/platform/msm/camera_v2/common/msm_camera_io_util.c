@@ -1,4 +1,5 @@
 /* Copyright (c) 2011-2014, 2017, The Linux Foundataion. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -577,7 +578,13 @@ disable_vreg:
 				continue;
 		} else
 			j = i;
+
+#ifdef CONFIG_MACH_XIAOMI
+		if (reg_ptr[j] != NULL)
+			regulator_disable(reg_ptr[j]);
+#else
 		regulator_disable(reg_ptr[j]);
+#endif
 		if (cam_vreg[j].delay > 20)
 			msleep(cam_vreg[j].delay);
 		else if (cam_vreg[j].delay)
