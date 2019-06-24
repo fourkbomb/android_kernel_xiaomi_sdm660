@@ -1,4 +1,5 @@
 /* Copyright (c) 2017 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -332,7 +333,11 @@ static struct class_attribute pl_attributes[] = {
  *  TAPER  *
 ************/
 #define MINIMUM_PARALLEL_FCC_UA		500000
+#ifdef CONFIG_MACH_XIAOMI
+#define PL_TAPER_WORK_DELAY_MS		100
+#else
 #define PL_TAPER_WORK_DELAY_MS		500
+#endif
 #define TAPER_RESIDUAL_PCT		75
 static void pl_taper_work(struct work_struct *work)
 {
@@ -797,7 +802,11 @@ stepper_exit:
 	}
 }
 
+#ifdef CONFIG_MACH_XIAOMI
+#define PARALLEL_FLOAT_VOLTAGE_DELTA_UV 100000
+#else
 #define PARALLEL_FLOAT_VOLTAGE_DELTA_UV 50000
+#endif
 static int pl_fv_vote_callback(struct votable *votable, void *data,
 			int fv_uv, const char *client)
 {
@@ -865,7 +874,11 @@ static int usb_icl_vote_callback(struct votable *votable, void *data,
 	 *	unvote USBIN_I_VOTER) the status_changed_work enables
 	 *	USBIN_I_VOTER based on settled current.
 	 */
+#ifdef CONFIG_MACH_XIAOMI
+	if (icl_ua <= 1300000)
+#else
 	if (icl_ua <= 1400000)
+#endif
 		vote(chip->pl_enable_votable_indirect, USBIN_I_VOTER, false, 0);
 	else
 		schedule_delayed_work(&chip->status_change_work,
@@ -1194,11 +1207,19 @@ static void handle_settled_icl_change(struct pl_data *chip)
 	}
 	main_limited = pval.intval;
 
+#ifdef CONFIG_MACH_XIAOMI
+	if ((main_limited && (main_settled_ua + chip->pl_settled_ua) < 1300000)
+			|| (main_settled_ua == 0)
+			|| ((total_current_ua >= 0) &&
+				(total_current_ua <= 1300000)))
+		vote(chip->pl_enable_votable_indirect, USBIN_I_VOTER, false, 0);
+#else
 	if ((main_limited && (main_settled_ua + chip->pl_settled_ua) < 1400000)
 			|| (main_settled_ua == 0)
 			|| ((total_current_ua >= 0) &&
 				(total_current_ua <= 1400000)))
 		vote(chip->pl_enable_votable_indirect, USBIN_I_VOTER, false, 0);
+#endif
 	else
 		vote(chip->pl_enable_votable_indirect, USBIN_I_VOTER, true, 0);
 

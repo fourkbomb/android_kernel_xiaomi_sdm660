@@ -1,4 +1,5 @@
 /* Copyright (c) 2017 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -115,30 +116,34 @@ static struct step_chg_cfg step_chg_config = {
  * range data must be in increasing ranges and shouldn't overlap.
  * Gaps are okay
  */
+#if defined(CONFIG_MACH_LAVENDER)
 static struct jeita_fcc_cfg jeita_fcc_config = {
 	.psy_prop	= POWER_SUPPLY_PROP_TEMP,
 	.prop_name	= "BATT_TEMP",
-	.hysteresis	= 10, /* 1degC hysteresis */
+	.hysteresis	= 0, /* 1degC hysteresis */
 	.fcc_cfg	= {
 		/* TEMP_LOW	TEMP_HIGH	FCC */
-		{0,		100,		600000},
-		{101,		200,		2000000},
-		{201,		450,		3000000},
-		{451,		550,		600000},
+		{0,		50,		400000},
+		{51,		150,		1200000},
+		{151,	450,		2900000},
+		{451,	600,		2000000},
 	},
 };
+#endif
 
+#ifdef CONFIG_MACH_XIAOMI
 static struct jeita_fv_cfg jeita_fv_config = {
 	.psy_prop	= POWER_SUPPLY_PROP_TEMP,
 	.prop_name	= "BATT_TEMP",
-	.hysteresis	= 10, /* 1degC hysteresis */
+	.hysteresis	= 0, /* 1degC hysteresis */
 	.fv_cfg		= {
-		/* TEMP_LOW	TEMP_HIGH	FCC */
-		{0,		100,		4200000},
-		{101,		450,		4400000},
-		{451,		550,		4200000},
+		/* TEMP_LOW	TEMP_HIGH	FV */
+		{0,		150,		4400000},
+		{151,	450,		4400000},
+		{451,	600,		4100000},
 	},
 };
+#endif
 
 static bool is_batt_available(struct step_chg_info *chip)
 {
