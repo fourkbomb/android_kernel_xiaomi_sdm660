@@ -11,8 +11,47 @@ config MACH_XIAOMI_SDM660
 	help
 		Support for Xiaomi SDM660 boards.
 
+config MACH_XIAOMI_UNTESTED
+	bool
+	default n
+
+config MACH_D2S
+	bool
+	default n
+
 config MACH_LAVENDER
 	bool "lavender (aka f7a)"
 	select MACH_XIAOMI_SDM660
 	help
 		Support for the Redmi Note 7, codenamed lavender/f7a.
+
+config MACH_WAYNE
+	bool "wayne (aka d2s)"
+	select MACH_XIAOMI_SDM660
+	select MACH_D2S
+	depends on MACH_XIAOMI_UNTESTED
+	help
+		Support for Xiaomi 6X, codenamed wayne/d2s
+
+config MACH_JASMINE
+	bool "jasmine (aka d2s)"
+	select MACH_XIAOMI_SDM660
+	select MACH_D2S
+	depends on MACH_XIAOMI_UNTESTED
+	help
+		Support for Mi A2, codenamed jasmine/d2s
+
+config MACH_WHYRED
+	bool "whyred (aka e7s)"
+	select MACH_XIAOMI_SDM660
+	depends on MACH_XIAOMI_UNTESTED
+	help
+		Support for the Redmi Note 5, codenamed whyred.
+
+config MACH_TULIP
+	bool "tulip (aka e7t)"
+	select MACH_XIAOMI_SDM660
+	depends on MACH_XIAOMI_UNTESTED
+	help
+		Support for the Redmi Note6 Pro, codenamed tulip.
+
