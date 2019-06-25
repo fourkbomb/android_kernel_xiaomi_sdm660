@@ -2830,7 +2830,10 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 		.stream_name = "Primary MI2S Playback",
 		.cpu_dai_name = "msm-dai-q6-mi2s.0",
 		.platform_name = "msm-pcm-routing",
-#if defined(CONFIG_SND_SOC_MAX98937) // XXX forkbomb: never true?
+#if defined(CONFIG_SND_SOC_TAS2557)
+		.codec_name = "tas2557.6-004c",
+		.codec_dai_name = "tas2557 ASI1",
+#elif defined(CONFIG_SND_SOC_MAX98937) // XXX forkbomb: never true?
 		.codec_name = "max98927",
 		.codec_dai_name = "max98927-aif1",
 #else
@@ -2850,7 +2853,10 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 		.stream_name = "Primary MI2S Capture",
 		.cpu_dai_name = "msm-dai-q6-mi2s.0",
 		.platform_name = "msm-pcm-routing",
-#if defined(CONFIG_SND_SOC_MAX98937)
+#ifdef CONFIG_SND_SOC_TAS2557
+		.codec_name = "tas2557.6-004c",
+		.codec_dai_name = "tas2557 ASI1",
+#elif defined(CONFIG_SND_SOC_MAX98937)
 		.codec_name = "max98927",
 		.codec_dai_name = "max98927-aif1",
 #else

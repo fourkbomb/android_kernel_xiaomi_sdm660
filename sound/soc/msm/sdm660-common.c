@@ -405,7 +405,7 @@ static struct afe_clk_set mi2s_mclk[MI2S_MAX] = {
 	}
 };
 
-#if defined(CONFIG_MACH_XIAOMI) && defined(CONFIG_SND_I2S_PRIMARY)
+#if defined(CONFIG_MACH_XIAOMI) && (defined(CONFIG_SND_SOC_TAS2557) || defined(CONFIG_SND_I2S_PRIMARY))
 static int pri_i2s_gpio_enable(bool enable);
 #endif
 static struct mi2s_conf mi2s_intf_conf[MI2S_MAX];
@@ -2503,7 +2503,7 @@ int msm_mi2s_snd_startup(struct snd_pcm_substream *substream)
 			mi2s_clk[index].clk_id = mi2s_ebit_clk[index];
 			fmt = SND_SOC_DAIFMT_CBM_CFM;
 		}
-#if defined(CONFIG_MACH_XIAOMI) && defined(CONFIG_SND_I2S_PRIMARY)
+#if defined(CONFIG_MACH_XIAOMI) && (defined(CONFIG_SND_SOC_TAS2557) || defined(CONFIG_SND_I2S_PRIMARY))
 		pri_i2s_gpio_enable(true);
 #endif
 		ret = msm_mi2s_set_sclk(substream, true);
@@ -2573,7 +2573,7 @@ void msm_mi2s_snd_shutdown(struct snd_pcm_substream *substream)
 			pr_err("%s:clock disable failed for MI2S (%d); ret=%d\n",
 				__func__, index, ret);
 
-#if defined(CONFIG_MACH_XIAOMI) && defined(CONFIG_SND_I2S_PRIMARY)
+#if defined(CONFIG_MACH_XIAOMI) && (defined(CONFIG_SND_SOC_TAS2557) || defined(CONFIG_SND_I2S_PRIMARY))
 		pri_i2s_gpio_enable(false);
 #endif
 
@@ -3047,7 +3047,7 @@ static const struct of_device_id sdm660_asoc_machine_of_match[]  = {
 	{},
 };
 
-#if defined(CONFIG_MACH_XIAOMI) && defined(CONFIG_SND_I2S_PRIMARY)
+#if defined(CONFIG_MACH_XIAOMI) && (defined(CONFIG_SND_SOC_TAS2557) || defined(CONFIG_SND_I2S_PRIMARY))
 #define PRI_I2S_ACTIVE "pri_i2s_active"
 #define PRI_I2S_SLEEP "pri_i2s_sleep"
 struct pri_i2s_gpioset
@@ -3133,7 +3133,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 	}
 	pdata->mclk_freq = id;
 
-#if defined(CONFIG_MACH_XIAOMI) && defined(CONFIG_SND_I2S_PRIMARY)
+#if defined(CONFIG_MACH_XIAOMI) && (defined(CONFIG_SND_SOC_TAS2557) || defined(CONFIG_SND_I2S_PRIMARY))
 	ret = pri_i2s_gpio_init(&pdev->dev);
 	if (ret) {
 		dev_err(&pdev->dev,
