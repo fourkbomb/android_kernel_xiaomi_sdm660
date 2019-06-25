@@ -2833,6 +2833,9 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 #if defined(CONFIG_SND_SOC_TAS2557)
 		.codec_name = "tas2557.6-004c",
 		.codec_dai_name = "tas2557 ASI1",
+#elif defined(CONFIG_SND_SOC_TFA98XX)
+		.codec_name = "tfa98xx.6-0034",
+		.codec_dai_name = "tfa98xx-aif",
 #elif defined(CONFIG_SND_SOC_MAX98937) // XXX forkbomb: never true?
 		.codec_name = "max98927",
 		.codec_dai_name = "max98927-aif1",
@@ -2856,6 +2859,9 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 #ifdef CONFIG_SND_SOC_TAS2557
 		.codec_name = "tas2557.6-004c",
 		.codec_dai_name = "tas2557 ASI1",
+#elif defined(CONFIG_SND_SOC_TFA98XX)
+		.codec_name = "tfa98xx.6-0034",
+		.codec_dai_name = "tfa98xx-aif",
 #elif defined(CONFIG_SND_SOC_MAX98937)
 		.codec_name = "max98927",
 		.codec_dai_name = "max98927-aif1",
