@@ -8,6 +8,7 @@
  * interface.
  *
  * Copyright (C) 2010 IBM Corperation
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * Author: John Stultz <john.stultz@linaro.org>
  *
@@ -123,7 +124,15 @@ void set_power_on_alarm(void)
 	if (next) {
 		alarm_ts = ktime_to_timespec(next->expires);
 		alarm_secs = alarm_ts.tv_sec;
+#ifdef CONFIG_MACH_XIAOMI // XXX forkbomb: why?
+		printk (KERN_WARNING "set_power_on_alarm:ALARM_POWEROFF_REALTIME is not NULL!!!\n");
+	} else {
+		printk (KERN_WARNING "set_power_on_alarm:next is null ,skip disable alarm\n");
+		goto exit;
 	}
+#else
+	}
+#endif
 
 	if (!alarm_secs)
 		goto disable_alarm;
